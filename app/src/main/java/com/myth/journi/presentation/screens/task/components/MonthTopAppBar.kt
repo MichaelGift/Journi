@@ -20,7 +20,7 @@ import com.myth.journi.presentation.screens.getWeekPageTitle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomMediumAppBar(
+fun MonthTopAppBar(
     visibleWeek: Week,
     onNavigationClick: () -> Unit,
     streak: String
