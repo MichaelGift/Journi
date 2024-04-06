@@ -1,5 +1,6 @@
-package com.myth.journi.data.database
+package com.myth.journi.data
 
+import com.myth.journi.data.database.GoalDao
 import com.myth.journi.domain.model.Goal
 import com.myth.journi.domain.repository.GoalRepo
 import javax.inject.Inject
