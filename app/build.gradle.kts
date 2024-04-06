@@ -66,4 +66,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Extended Icons
+    implementation("androidx.compose.material:material-icons-extended:1.6.5")
+
+    // Calendar
+    val calendarVersion = "2.4.1"
+    implementation("com.kizitonwose.calendar:compose:$calendarVersion")
 }
