@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
         ),
     ]
 )
-data class Actions(
+data class Action(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val pomodoroSettings: Pomodoro,

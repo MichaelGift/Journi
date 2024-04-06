@@ -9,5 +9,5 @@ data class Goal(
     val id: Long,
     val title: String,
     val category: String,
-    val actionSteps: Actions,
+    val actionSteps: Action,
 )

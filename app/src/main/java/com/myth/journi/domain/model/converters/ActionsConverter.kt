@@ -3,17 +3,17 @@ package com.myth.journi.domain.model.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.myth.journi.domain.model.Actions
+import com.myth.journi.domain.model.Action
 
 
 class ActionsConverter {
     @TypeConverter
-    fun fromActions(actions: Actions): String {
-        return Gson().toJson(actions)
+    fun fromActions(action: Action): String {
+        return Gson().toJson(action)
     }
 
     @TypeConverter
-    fun toActions(actions: String): Actions {
-        return Gson().fromJson(actions, Actions::class.java)
+    fun toActions(actions: String): Action {
+        return Gson().fromJson(actions, Action::class.java)
     }
 }
