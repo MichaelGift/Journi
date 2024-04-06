@@ -7,6 +7,6 @@ interface GoalRepo {
     suspend fun updateGoal(goal: Goal)
     suspend fun deleteGoal(goal: Goal)
     suspend fun deleteGoals(goals: List<Goal>)
-    suspend fun getAllGaols(): List<Goal>
+    suspend fun getAllGoals(): List<Goal>
 
 }

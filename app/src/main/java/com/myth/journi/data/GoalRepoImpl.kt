@@ -24,7 +24,7 @@ class GoalRepoImpl @Inject constructor(
         goalDao.deleteGoals(goals)
     }
 
-    override suspend fun getAllGaols(): List<Goal> {
+    override suspend fun getAllGoals(): List<Goal> {
         return goalDao.getAllGoals()
     }
 
