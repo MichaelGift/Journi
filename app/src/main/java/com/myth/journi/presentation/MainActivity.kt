@@ -1,4 +1,4 @@
-package com.myth.journi
+package com.myth.journi.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
