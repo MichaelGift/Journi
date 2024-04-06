@@ -1,5 +1,6 @@
 package com.myth.journi.domain.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -18,6 +19,7 @@ import androidx.room.PrimaryKey
 data class Pomodoro(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    @ColumnInfo(index = true)
     val actionId: Long,
     val runs: Int,
     val duration: Long,

@@ -1,5 +1,6 @@
 package com.myth.journi.domain.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -17,8 +18,9 @@ import androidx.room.PrimaryKey
 )
 data class Actions(
     @PrimaryKey(autoGenerate = true)
-    val actionId: Long,
+    val id: Long,
     val pomodoroSettings: Pomodoro,
+    @ColumnInfo(index=true)
     val goalId: Long,
     val total: Int,
     val completed: Int,
