@@ -11,7 +11,7 @@ import com.myth.journi.domain.model.Goal
 @Dao
 interface GoalDao {
     @Insert
-    suspend fun saveGoals(goal: Goal)
+    suspend fun saveGoal(goal: Goal)
 
     @Update
     suspend fun updateGoal(goal: Goal)
