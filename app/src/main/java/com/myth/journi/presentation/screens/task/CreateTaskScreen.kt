@@ -97,7 +97,7 @@ fun CreateGoalScreen(
             GoalTopAppBar(
                 title = "Create Goal",
                 onNavigationClick = {
-                    navController.navigate(Screen.TaskList.route)
+                    navController.navigateUp()
                 },
                 onSaveIconClick = {
                     taskViewModel.saveGoal(
