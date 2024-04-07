@@ -1,9 +1,9 @@
 package com.myth.journi.presentation.screens.task
 
 import Day
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +27,7 @@ import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.myth.journi.common.utils.Screen
 import com.myth.journi.presentation.screens.task.components.MonthTopAppBar
+import com.myth.journi.presentation.screens.task.components.TaskCard
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,10 +82,14 @@ fun TaskListScreen(
                 state = rememberLazyListState(),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 16.dp, end = 16.dp)
             ) {
-                items(items = goals) {
-
+                items(items = goals) { goal ->
+                    TaskCard(
+                        item = goal,
+                        modifier = Modifier
+                            .clickable { }
+                            .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+                    )
                 }
             }
         }
