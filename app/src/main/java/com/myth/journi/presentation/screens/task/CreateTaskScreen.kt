@@ -33,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.myth.journi.common.utils.Screen
 import com.myth.journi.domain.model.Action
 import com.myth.journi.domain.model.Goal
 import com.myth.journi.domain.model.Pomodoro
@@ -52,6 +54,7 @@ import kotlin.time.DurationUnit
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGoalScreen(
+    navController: NavController,
     taskViewModel: TaskViewModel = hiltViewModel()
 ) {
 
@@ -93,7 +96,9 @@ fun CreateGoalScreen(
         topBar = {
             GoalTopAppBar(
                 title = "Create Goal",
-                onNavigationClick = {},
+                onNavigationClick = {
+                    navController.navigate(Screen.TaskList.route)
+                },
                 onSaveIconClick = {
                     taskViewModel.saveGoal(
                         goal = Goal(
@@ -123,7 +128,8 @@ fun CreateGoalScreen(
                                         actionId = 0,
                                         done = false,
                                         description = description
-                                    )},
+                                    )
+                                },
                                 timeBlockStart = String.format(
                                     "%02d%02d",
                                     startTimePickerState.hour,
@@ -136,11 +142,11 @@ fun CreateGoalScreen(
                                 ).toLong()
                             )
                         )
-                    ) {isSuccessful, messsage ->
+                    ) { isSuccessful, messsage ->
                         if (isSuccessful)
                             Log.d("CreateTask", "Success")
-                        else{
-                            Log.e("CreateTask" ,messsage.toString())
+                        else {
+                            Log.e("CreateTask", messsage.toString())
                         }
                     }
                 })

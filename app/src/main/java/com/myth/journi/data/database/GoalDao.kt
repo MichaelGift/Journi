@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.myth.journi.domain.model.GOALS_TABLE
 import com.myth.journi.domain.model.Goal
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GoalDao {
@@ -23,5 +24,5 @@ interface GoalDao {
     suspend fun deleteGoals(goals: List<Goal>)
 
     @Query("SELECT * From $GOALS_TABLE")
-    suspend fun getAllGoals(): List<Goal>
+    fun getAllGoals(): Flow<List<Goal>>
 }
