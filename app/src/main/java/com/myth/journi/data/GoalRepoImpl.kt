@@ -3,6 +3,7 @@ package com.myth.journi.data
 import com.myth.journi.data.database.GoalDao
 import com.myth.journi.domain.model.Goal
 import com.myth.journi.domain.repository.GoalRepo
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GoalRepoImpl @Inject constructor(
@@ -24,7 +25,7 @@ class GoalRepoImpl @Inject constructor(
         goalDao.deleteGoals(goals)
     }
 
-    override suspend fun getAllGoals(): List<Goal> {
+    override fun getAllGoals(): Flow<List<Goal>> {
         return goalDao.getAllGoals()
     }
 

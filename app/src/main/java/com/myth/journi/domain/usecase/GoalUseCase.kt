@@ -1,7 +1,10 @@
 package com.myth.journi.domain.usecase
 
+import android.util.Log
 import com.myth.journi.domain.model.Goal
 import com.myth.journi.domain.repository.GoalRepo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class GoalUseCase @Inject constructor(
@@ -43,13 +46,12 @@ class GoalUseCase @Inject constructor(
         }
     }
 
-    suspend fun getAllGoals(onSuccess: (Boolean, String?) -> Unit): List<Goal> {
-        var goals: List<Goal> = emptyList()
+    fun getAllGoals(): Flow<List<Goal>> {
+        var goals: Flow<List<Goal>> = emptyFlow()
         try {
             goals = goalRepo.getAllGoals()
-            onSuccess(true, null)
         } catch (e: Exception) {
-            onSuccess(false, e.message)
+            Log.d("Goals Use Case", e.message!!)
         }
         return goals
     }
