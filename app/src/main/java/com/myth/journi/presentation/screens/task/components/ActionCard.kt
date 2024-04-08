@@ -28,11 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.myth.journi.domain.model.Goal
+import com.myth.journi.domain.model.Action
 
 @Composable
-fun TaskCard(
-    item: Goal,
+fun ActionStats(
+    item: Action,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
@@ -48,8 +48,8 @@ fun TaskCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    TaskTimeStart(item.actionSteps.timeBlockStart.toString())
-                    TaskTimeEnd(item.actionSteps.timeBlockEnd.toString())
+                    TaskTimeStart(item.timeBlockStart.toString())
+                    TaskTimeEnd(item.timeBlockEnd.toString())
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Separator()
@@ -72,7 +72,7 @@ fun TaskCard(
                 Separator()
                 Spacer(modifier = Modifier.width(8.dp))
 
-                TaskProgressIndicator(item.actionSteps.completed, item.actionSteps.total)
+                TaskProgressIndicator(item.completed, item.total)
             }
         }
     }
