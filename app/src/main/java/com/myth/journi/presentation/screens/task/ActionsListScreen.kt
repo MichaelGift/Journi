@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddTask
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -27,16 +26,16 @@ import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.myth.journi.common.utils.Screen
 import com.myth.journi.presentation.screens.task.components.MonthTopAppBar
-import com.myth.journi.presentation.screens.task.components.TaskCard
+import com.myth.journi.presentation.screens.task.components.ActionStats
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun TaskListScreen(
+fun ActionsListScreen(
     navController: NavController,
-    taskViewModel: TaskViewModel = hiltViewModel()
+    actionsViewModel: ActionsViewModel = hiltViewModel()
 ) {
-    val goals = taskViewModel.state.value
+    val actions = actionsViewModel.actions.value
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
@@ -56,7 +55,7 @@ fun TaskListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(Screen.TaskCreation.route)
+                navController.navigate(Screen.GoalCreationScreen.route)
             }) {
                 Icon(
                     imageVector = Icons.Default.AddTask,
@@ -83,11 +82,15 @@ fun TaskListScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                items(items = goals) { goal ->
-                    TaskCard(
-                        item = goal,
+                items(items = actions) { actionItem ->
+                    ActionStats(
+                        item = actionItem,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable {
+                                navController.navigate(
+                                    Screen.PomodoroScreen.route + "?actionId=${actionItem.id}"
+                                )
+                            }
                             .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
                     )
                 }

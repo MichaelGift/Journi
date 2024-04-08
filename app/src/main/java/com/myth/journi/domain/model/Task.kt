@@ -22,6 +22,6 @@ data class Task(
     val id: Long,
     @ColumnInfo(index = true)
     val actionId: Long,
-    val done: Boolean,
+    var done: Boolean,
     val description: String
 )

@@ -19,14 +19,14 @@ import androidx.room.PrimaryKey
 data class Action(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val pomodoroSettings: Pomodoro,
     @ColumnInfo(index=true)
     val goalId: Long,
+    val title: String,
+    val category: String,
     val total: Int,
-    val completed: Int,
+    var completed: Int,
     val startDate: Long,
     val endDate: Long,
     val timeBlockStart: Long,
     val timeBlockEnd: Long,
-    val tasks: List<Task>,
 )
