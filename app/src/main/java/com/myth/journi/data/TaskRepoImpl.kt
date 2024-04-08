@@ -3,6 +3,7 @@ package com.myth.journi.data
 import com.myth.journi.data.database.TaskDao
 import com.myth.journi.domain.model.Task
 import com.myth.journi.domain.repository.TaskRepo
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TaskRepoImpl @Inject constructor(
@@ -19,9 +20,8 @@ class TaskRepoImpl @Inject constructor(
     override suspend fun updateTask(task: Task) {
         taskDao.updateTask(task)
     }
-
-    override suspend fun updateAllTasks(task: List<Task>) {
-        taskDao.updateAllTasks(task)
+    override suspend fun updateCompletedTasks(task: List<Task>) {
+        taskDao.updateCompletedTasks(task)
     }
 
     override suspend fun deleteTask(task: Task) {
@@ -36,7 +36,6 @@ class TaskRepoImpl @Inject constructor(
         return taskDao.getAllTasks()
     }
 
-    override suspend fun getAllActionTasks(id: Long): List<Task> {
-        return taskDao.getAllActionTasks(id)
-    }
+    override fun getAllActionTasks(id: Long): Flow<List<Task>>
+        = taskDao.getAllActionTasks(id)
 }

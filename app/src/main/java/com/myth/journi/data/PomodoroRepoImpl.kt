@@ -3,6 +3,7 @@ package com.myth.journi.data
 import com.myth.journi.data.database.PomodoroDao
 import com.myth.journi.domain.model.Pomodoro
 import com.myth.journi.domain.repository.PomodoroRepo
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PomodoroRepoImpl @Inject constructor(
@@ -24,7 +25,6 @@ class PomodoroRepoImpl @Inject constructor(
         return pomodoroDao.getAllPomodoroSettings()
     }
 
-    override suspend fun getActionsPomodoro(id: Long): Pomodoro {
-        return pomodoroDao.getActionsPomodoro(id)
-    }
+    override fun getActionsPomodoro(id: Long): Flow<Pomodoro> =
+         pomodoroDao.getActionsPomodoro(id)
 }

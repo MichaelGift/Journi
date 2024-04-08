@@ -9,9 +9,8 @@ import javax.inject.Inject
 class GoalRepoImpl @Inject constructor(
     private val goalDao: GoalDao
 ) : GoalRepo {
-    override suspend fun saveGoal(goal: Goal) {
+    override suspend fun saveGoal(goal: Goal) =
         goalDao.saveGoal(goal)
-    }
 
     override suspend fun updateGoal(goal: Goal) {
         goalDao.updateGoal(goal)
