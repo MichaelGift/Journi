@@ -34,11 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.myth.journi.common.utils.Screen
-import com.myth.journi.domain.model.Action
 import com.myth.journi.domain.model.Goal
-import com.myth.journi.domain.model.Pomodoro
-import com.myth.journi.domain.model.Task
 import com.myth.journi.presentation.screens.task.components.Chip
 import com.myth.journi.presentation.screens.task.components.DatePickerDialog
 import com.myth.journi.presentation.screens.task.components.GoalTopAppBar
@@ -47,15 +43,13 @@ import com.myth.journi.presentation.screens.task.components.TimePickerDialog
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.DurationUnit
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGoalScreen(
     navController: NavController,
-    taskViewModel: TaskViewModel = hiltViewModel()
+    goalsViewModel: GoalsViewModel = hiltViewModel()
 ) {
 
     var title by remember { mutableStateOf("") }
@@ -100,53 +94,24 @@ fun CreateGoalScreen(
                     navController.navigateUp()
                 },
                 onSaveIconClick = {
-                    taskViewModel.saveGoal(
+                    goalsViewModel.saveGoal(
                         goal = Goal(
                             id = 0,
                             title = title,
                             description = description,
-                            category = "",
-                            actionSteps = Action(
-                                id = 0,
-                                pomodoroSettings = Pomodoro(
-                                    id = 0,
-                                    actionId = 0,
-                                    runs = 16,
-                                    duration = 25.minutes.toLong(DurationUnit.MILLISECONDS),
-                                    shortRestDuration = 5.minutes.toLong(DurationUnit.MILLISECONDS),
-                                    longRestDuration = 15.minutes.toLong(DurationUnit.MILLISECONDS),
-                                    setsBeforeLongRest = 4
-                                ),
-                                goalId = 0,
-                                total = tasks.size,
-                                completed = 0,
-                                startDate = startDatePickerState.selectedDateMillis!!,
-                                endDate = endDatePickerState.selectedDateMillis!!,
-                                tasks = tasks.mapIndexed { index, description ->
-                                    Task(
-                                        id = index.toLong(),
-                                        actionId = 0,
-                                        done = false,
-                                        description = description
-                                    )
-                                },
-                                timeBlockStart = String.format(
-                                    "%02d%02d",
-                                    startTimePickerState.hour,
-                                    startTimePickerState.minute
-                                ).toLong(),
-                                timeBlockEnd = String.format(
-                                    "%02d%02d",
-                                    endTimePickerState.hour,
-                                    endTimePickerState.minute
-                                ).toLong()
-                            )
-                        )
-                    ) { isSuccessful, messsage ->
+                        ),
+                        startDate = startDatePickerState.selectedDateMillis!!,
+                        endDate = endDatePickerState.selectedDateMillis!!,
+                        startTimeHour = startTimePickerState.hour,
+                        startTimeMinute = startTimePickerState.minute,
+                        endTimeHour = endTimePickerState.hour,
+                        endTimeMinute = endTimePickerState.minute,
+                        tasks = tasks
+                    ) { isSuccessful, message ->
                         if (isSuccessful)
                             Log.d("CreateTask", "Success")
                         else {
-                            Log.e("CreateTask", messsage.toString())
+                            Log.e("CreateTask", message.toString())
                         }
                     }
                 })
