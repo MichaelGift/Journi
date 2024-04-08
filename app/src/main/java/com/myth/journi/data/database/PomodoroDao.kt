@@ -3,15 +3,17 @@ package com.myth.journi.data.database
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.myth.journi.domain.model.POMODOROS_TABLE
 import com.myth.journi.domain.model.Pomodoro
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface PomodoroDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPomodoroSettings(pomodoro: Pomodoro)
 
     @Update
@@ -24,5 +26,5 @@ interface PomodoroDao {
     suspend fun getAllPomodoroSettings(): List<Pomodoro>
 
     @Query("SELECT * FROM $POMODOROS_TABLE WHERE actionId = :id")
-    suspend fun getActionsPomodoro(id:Long): Pomodoro
+    fun getActionsPomodoro(id:Long): Flow<Pomodoro>
 }
