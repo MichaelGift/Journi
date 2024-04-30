@@ -3,6 +3,7 @@ package com.myth.journi.common.di
 import android.content.Context
 import androidx.room.Room
 import com.myth.journi.data.database.ActionDao
+import com.myth.journi.data.database.DiaryDao
 import com.myth.journi.data.database.GoalDao
 import com.myth.journi.data.database.JourniDB
 import com.myth.journi.data.database.PomodoroDao
@@ -48,5 +49,11 @@ object Database {
     @Singleton
     fun providesTaskDao(journiDB: JourniDB): TaskDao {
         return journiDB.taskDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesDiaryDao(journiDB: JourniDB): DiaryDao {
+        return journiDB.diaryDao()
     }
 }

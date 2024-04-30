@@ -4,7 +4,9 @@ import com.myth.journi.data.ActionRepoImpl
 import com.myth.journi.data.GoalRepoImpl
 import com.myth.journi.data.PomodoroRepoImpl
 import com.myth.journi.data.TaskRepoImpl
+import com.myth.journi.data.database.DiaryRepoImpl
 import com.myth.journi.domain.repository.ActionRepo
+import com.myth.journi.domain.repository.DiaryRepo
 import com.myth.journi.domain.repository.GoalRepo
 import com.myth.journi.domain.repository.PomodoroRepo
 import com.myth.journi.domain.repository.TaskRepo
@@ -28,4 +30,7 @@ abstract class Interfaces {
 
     @Binds
     abstract fun taskRepo(taskRepoImpl: TaskRepoImpl): TaskRepo
+
+    @Binds
+    abstract fun diaryRepo(diaryRepoImpl: DiaryRepoImpl): DiaryRepo
 }
