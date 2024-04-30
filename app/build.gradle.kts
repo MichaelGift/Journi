@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -73,7 +73,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.5")
 
     // Calendar
-    val calendarVersion = "2.4.1"
+    val calendarVersion = "2.5.0"
     implementation("com.kizitonwose.calendar:compose:$calendarVersion")
 
     // Room DB
