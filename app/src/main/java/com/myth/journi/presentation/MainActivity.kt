@@ -29,28 +29,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    NavHost(
-                        navController = navController, startDestination = Screen.ActionsListScreen.route
-                    ) {
-                        composable(Screen.ActionsListScreen.route) {
-                            ActionsListScreen(navController = navController)
-                        }
-                        composable(Screen.GoalCreationScreen.route) {
-                            CreateGoalScreen(navController = navController)
-                        }
-                        composable(
-                            route = Screen.PomodoroScreen.route + "?actionId={actionId}",
-                            arguments = listOf(
-                                navArgument(name = "actionId") {
-                                    type = NavType.LongType
-                                    defaultValue = -1
-                                },
-                            )
-                        ) {
-                            PomodoroScreen(navController = navController)
-                        }
-                    }
+                    AppNavigation()
                 }
             }
         }
