@@ -19,23 +19,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.myth.journi.common.utils.Screen
-import com.myth.journi.presentation.screens.task.components.MonthTopAppBar
+import com.myth.journi.domain.model.Action
 import com.myth.journi.presentation.screens.task.components.ActionStats
+import com.myth.journi.presentation.screens.task.components.MonthTopAppBar
+import com.myth.journi.ui.theme.JourniTheme
 import java.time.LocalDate
 
 
 @Composable
 fun ActionsListScreen(
-    navController: NavController,
-    actionsViewModel: ActionsViewModel = hiltViewModel()
+    navigate: (String) -> Unit,
+    actions: List<Action>
 ) {
-    val actions = actionsViewModel.actions.value
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
@@ -55,7 +55,7 @@ fun ActionsListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(Screen.GoalCreationScreen.route)
+                navigate(Screen.GoalCreationScreen.route)
             }) {
                 Icon(
                     imageVector = Icons.Default.AddTask,
@@ -87,14 +87,21 @@ fun ActionsListScreen(
                         item = actionItem,
                         modifier = Modifier
                             .clickable {
-                                navController.navigate(
-                                    Screen.PomodoroScreen.route + "?actionId=${actionItem.id}"
-                                )
+                                navigate(Screen.PomodoroScreen.route + "?actionId=${actionItem.id}")
                             }
                             .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
                     )
                 }
             }
         }
+    }
+}
+
+
+@Preview
+@Composable
+fun PreviewActionsListScreen(){
+    JourniTheme {
+        ActionsListScreen(navigate = {}, actions = emptyList())
     }
 }
