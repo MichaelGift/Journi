@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.myth.journi.domain.model.Action
+import com.myth.journi.domain.model.DiaryModel
 import com.myth.journi.domain.model.Goal
 import com.myth.journi.domain.model.Pomodoro
 import com.myth.journi.domain.model.Task
@@ -17,7 +18,8 @@ import com.myth.journi.domain.model.converters.TaskConverter
         Goal::class,
         Action::class,
         Pomodoro::class,
-        Task::class
+        Task::class,
+        DiaryModel::class
     ],
     version = 1,
     exportSchema = false
@@ -32,4 +34,6 @@ abstract class JourniDB : RoomDatabase() {
     abstract fun actionDao(): ActionDao
     abstract fun pomodoroDao(): PomodoroDao
     abstract fun taskDao(): TaskDao
+
+    abstract fun diaryDao(): DiaryDao
 }
