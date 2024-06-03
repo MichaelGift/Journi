@@ -16,29 +16,31 @@ import javax.inject.Inject
 
 
 data class PomodoroState(
-    val pomodoro: Pomodoro? = null
+    val pomodoro: Pomodoro? = null,
 )
 
 @HiltViewModel
 class PomodoroViewModel @Inject constructor(
     private val pomodoroUseCase: PomodoroUseCase,
-    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     var pomodoroState by mutableStateOf(PomodoroState())
 
-    init {
-        savedStateHandle.get<Long>("actionId").let {actionId ->
-            if (actionId?.toInt() == -1) return@let
-            Log.d("PomodoroLog","$actionId")
-            viewModelScope.launch { getPomodoroById(actionId!!) }
+
+    fun onEvent(event: PomodoroEvent){
+        viewModelScope.launch {
+            when(event){
+                is PomodoroEvent.GetPomodoro -> getPomodoroById(event)
+            }
         }
     }
-
-    private suspend fun getPomodoroById(actionId: Long) {
-        pomodoroUseCase.getPomodoroById(actionId).collect { pomodoro ->
-            Log.e("PomodoroFlow", "$pomodoro")
+    private suspend fun getPomodoroById(event: PomodoroEvent.GetPomodoro) {
+        pomodoroUseCase.getPomodoroById(event.actionId).collect { pomodoro ->
             pomodoroState = pomodoroState.copy(pomodoro = pomodoro)
         }
     }
+}
+
+sealed class PomodoroEvent {
+    data class GetPomodoro(val actionId: Long): PomodoroEvent()
 }

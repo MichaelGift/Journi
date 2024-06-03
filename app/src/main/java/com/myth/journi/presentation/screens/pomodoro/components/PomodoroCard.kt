@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,8 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myth.journi.domain.model.Pomodoro
 import com.myth.journi.presentation.screens.task.components.getPercentage
+import kotlinx.coroutines.delay
+import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -56,6 +62,7 @@ fun PomodoroCard(
 
 @Composable
 fun PomodoroCounter(settings: Pomodoro) {
+    var isRunning by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableLongStateOf(settings.duration) }
     val progress = getPercentage(timeLeft.toInt(), settings.duration.toInt())
     val animationSpec =
@@ -66,15 +73,12 @@ fun PomodoroCounter(settings: Pomodoro) {
         label = " "
     )
 
-    DisposableEffect(Unit) {
-        val timer = fixedRateTimer(period = 1000) {
-            timeLeft -= 1000
-            if (timeLeft <= 0) {
-                cancel()
+    LaunchedEffect(isRunning) {
+        if (isRunning) {
+            while (isRunning && timeLeft > 0) {
+                delay(1000)
+                timeLeft -= 1000
             }
-        }
-        onDispose {
-            timer.cancel()
         }
     }
 
@@ -92,7 +96,9 @@ fun PomodoroCounter(settings: Pomodoro) {
             color = MaterialTheme.colorScheme.primary,
         )
         Column(
-            modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,){
             Text(
                 text = formatMillis(timeLeft),
@@ -105,11 +111,15 @@ fun PomodoroCounter(settings: Pomodoro) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { timeLeft = settings.duration }) {
                     Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = "Restart")
                 }
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Filled.Pause, contentDescription = "Pau")
+                IconButton(onClick = { isRunning = !isRunning }) {
+                    Icon(
+                        imageVector = 
+                            if (isRunning) Icons.Filled.Pause
+                            else Icons.Filled.PlayArrow,
+                        contentDescription = if (isRunning) "Pause" else "Play")
                 }
             }
         }

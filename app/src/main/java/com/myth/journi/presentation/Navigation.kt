@@ -19,10 +19,10 @@ import com.myth.journi.presentation.screens.task.GoalsViewModel
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    val actionsViewModel: ActionsViewModel = hiltViewModel()
-    val goalsViewModel: GoalsViewModel = hiltViewModel()
-    val taskViewModel: TasksViewModel = hiltViewModel()
-    val pomodoroViewModel: PomodoroViewModel = hiltViewModel()
+    val actionsVM: ActionsViewModel = hiltViewModel()
+    val goalsVM: GoalsViewModel = hiltViewModel()
+    val tasksVM: TasksViewModel = hiltViewModel()
+    val pomodoroVM: PomodoroViewModel = hiltViewModel()
 
 
     NavHost(
@@ -31,14 +31,16 @@ fun AppNavigation() {
         composable(Screen.ActionsListScreen.route) {
             ActionsListScreen(
                 navigate = { navController.navigate(it) },
-                actions = actionsViewModel.actions.value
+                actions = actionsVM.actions.value,
+                pomodoroEvent = pomodoroVM::onEvent,
+                taskEvent = tasksVM::onEvent
             )
         }
 
         composable(Screen.GoalCreationScreen.route) {
             CreateGoalScreen(
                 navigateBack = { navController.navigateUp() },
-                goalEvent = goalsViewModel::onEvent
+                goalEvent = goalsVM::onEvent
             )
         }
 
@@ -52,9 +54,9 @@ fun AppNavigation() {
             )
         ) {
             PomodoroScreen(
-                pomodoroState = pomodoroViewModel.pomodoroState,
-                taskState = taskViewModel.taskState,
-                taskEvent = taskViewModel::onEvent,
+                pomodoroState = pomodoroVM.pomodoroState,
+                taskState = tasksVM.taskState,
+                taskEvent = tasksVM::onEvent,
                 onBack = { navController.navigateUp() })
         }
     }

@@ -29,16 +29,14 @@ class TasksViewModel @Inject constructor(
 ) : ViewModel() {
     var taskState by mutableStateOf(TaskState())
 
-    private val _taskList = mutableStateOf(listOf<Task>())
-    val taskList: State<List<Task>> = _taskList
     private val _action = mutableStateOf<Action?>(null)
 
 
     init {
         savedStateHandle.get<Long>("actionId").let { actionId ->
             if (actionId?.toInt() == -1) return@let
-            viewModelScope.launch { getTasksByActionId(actionId!!) }
-            viewModelScope.launch { getActionById(actionId!!) }
+//            viewModelScope.launch { getTasksByActionId(actionId!!) }
+//            viewModelScope.launch { getActionById(actionId!!) }
         }
     }
 
@@ -47,6 +45,8 @@ class TasksViewModel @Inject constructor(
             when (event) {
                 is TaskEvent.SaveCompletedTasks -> saveCompletedTasks()
                 is TaskEvent.UpdateTaskList -> updateTaskList(event.index, event.isChecked)
+                is TaskEvent.GetAction -> getActionById(event.actionId)
+                is TaskEvent.GetTasks -> getTasksByActionId(event.actionId)
             }
         }
     }
@@ -65,20 +65,22 @@ class TasksViewModel @Inject constructor(
     }
 
     fun updateTaskList(index: Int, isChecked: Boolean) {
-        val updatedTaskList = _taskList.value.toMutableList()
-        updatedTaskList[index] = updatedTaskList[index].copy(done = isChecked)
-        _taskList.value = updatedTaskList
-        Log.d("TaskList", "${_taskList.value}")
-    }
+//        val updatedTaskList = _taskList.value.toMutableList()
+//        updatedTaskList[index] = updatedTaskList[index].copy(done = isChecked)
+//        _taskList.value = updatedTaskList
+//        Log.d("TaskList", "${_taskList.value}")
+     }
 
     fun saveCompletedTasks() = viewModelScope.launch {
-        val completedTasks = _taskList.value.filter { it.done }
-        tasksUseCase.updateTaskList(completedTasks)
-        _action.value.let { it?.completed = completedTasks.size }
-        actionsUseCase.updateTaskCompletion(_action.value!!)
+//        val completedTasks = _taskList.value.filter { it.done }
+//        tasksUseCase.updateTaskList(completedTasks)
+//        _action.value.let { it?.completed = completedTasks.size }
+//        actionsUseCase.updateTaskCompletion(_action.value!!)
     }
 }
 sealed class TaskEvent{
     data object SaveCompletedTasks: TaskEvent()
     data class UpdateTaskList(val index: Int, val isChecked: Boolean): TaskEvent()
+    data class GetTasks(val actionId: Long): TaskEvent()
+    data class GetAction(val actionId: Long): TaskEvent()
 }
