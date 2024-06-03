@@ -40,7 +40,7 @@ fun ActionStats(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
-            modifier = Modifier.padding(all = 8.dp),
+            modifier = Modifier.padding(all = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -114,6 +114,7 @@ fun TaskProgressIndicator(completed: Int, total: Int) {
         CircularProgressIndicator(
             progress = animatedProgress,
             color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
             modifier = Modifier.size(40.dp)
         )
         Text(

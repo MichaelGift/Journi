@@ -95,7 +95,7 @@ fun ActionsListScreen(
                                 pomodoroEvent(PomodoroEvent.GetPomodoro(actionItem.id))
                                 taskEvent(TaskEvent.GetAction(actionItem.id))
                                 taskEvent(TaskEvent.GetTasks(actionItem.id))
-                                navigate(Screen.PomodoroScreen.route + "?actionId=${actionItem.id}")
+                                navigate(Screen.PomodoroScreen.route)
                             }
                             .padding(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
                     )

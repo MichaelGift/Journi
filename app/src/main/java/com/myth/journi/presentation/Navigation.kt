@@ -2,11 +2,9 @@ package com.myth.journi.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.myth.journi.common.utils.Screen
 import com.myth.journi.presentation.screens.pomodoro.PomodoroScreen
 import com.myth.journi.presentation.screens.pomodoro.PomodoroViewModel
@@ -44,15 +42,7 @@ fun AppNavigation() {
             )
         }
 
-        composable(
-            route = Screen.PomodoroScreen.route + "?actionId={actionId}",
-            arguments = listOf(
-                navArgument(name = "actionId") {
-                    type = NavType.LongType
-                    defaultValue = -1
-                },
-            )
-        ) {
+        composable(route = Screen.PomodoroScreen.route) {
             PomodoroScreen(
                 pomodoroState = pomodoroVM.pomodoroState,
                 taskState = tasksVM.taskState,

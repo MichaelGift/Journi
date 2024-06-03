@@ -1,5 +1,6 @@
 package com.myth.journi.presentation.screens.pomodoro
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,16 +28,24 @@ fun PomodoroScreen(
     onBack: () -> Unit
 ) {
     Scaffold(
-        topBar = { PomodoroTopBar(title = " ", onNavigationClick = {
-            taskEvent(TaskEvent.SaveCompletedTasks)
-            onBack()
-        })
-    }) { paddingValues -> Column(
-            modifier = Modifier.padding(paddingValues).fillMaxSize()
+        topBar = {
+            PomodoroTopBar(title = " ", onNavigationClick = {
+                taskEvent(TaskEvent.SaveCompletedTasks)
+                onBack()
+            })
+        }) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         ) {
             if (pomodoroState.pomodoro != null) PomodoroCounter(settings = pomodoroState.pomodoro)
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn {
+
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 itemsIndexed(items = taskState.taskList) { index, item ->
                     if (!item.done) {
                         TaskCard(task = item) {
@@ -60,7 +69,7 @@ val pomodoro = PomodoroState(
         setsBeforeLongRest = 4
     )
 )
-val tasks =  TaskState(
+val tasks = TaskState(
     taskList = listOf(
         com.myth.journi.domain.model.Task(
             id = 0,
@@ -80,8 +89,51 @@ val tasks =  TaskState(
             done = false,
             description = "Task 3"
         ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 4"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 5"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 6"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 7"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 8"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 9"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 10"
+        ),
     )
 )
+
 @Preview
 @Composable
 fun PomodoroScreenPreview() {
