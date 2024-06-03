@@ -31,8 +31,7 @@ fun PomodoroScreen(
             taskEvent(TaskEvent.SaveCompletedTasks)
             onBack()
         })
-    }) { paddingValues ->
-        Column(
+    }) { paddingValues -> Column(
             modifier = Modifier.padding(paddingValues).fillMaxSize()
         ) {
             if (pomodoroState.pomodoro != null) PomodoroCounter(settings = pomodoroState.pomodoro)

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Place
@@ -102,7 +103,7 @@ fun PomodoroCounter(settings: Pomodoro) {
             horizontalAlignment = Alignment.CenterHorizontally,){
             Text(
                 text = formatMillis(timeLeft),
-                fontSize = 32.sp,
+                fontSize = 64.sp,
                 fontWeight = FontWeight.Bold
             )
 
@@ -111,10 +112,14 @@ fun PomodoroCounter(settings: Pomodoro) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                IconButton(onClick = { timeLeft = settings.duration }) {
+                IconButton(
+                    modifier = Modifier.size(30.dp),
+                    onClick = { timeLeft = settings.duration }) {
                     Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = "Restart")
                 }
-                IconButton(onClick = { isRunning = !isRunning }) {
+                IconButton(
+                    modifier = Modifier.size(30.dp),
+                    onClick = { isRunning = !isRunning }) {
                     Icon(
                         imageVector = 
                             if (isRunning) Icons.Filled.Pause
