@@ -2,7 +2,9 @@ package com.myth.journi.presentation.screens.pomodoro
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,14 +15,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+data class PomodoroState(
+    val pomodoro: Pomodoro? = null
+)
+
 @HiltViewModel
 class PomodoroViewModel @Inject constructor(
     private val pomodoroUseCase: PomodoroUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val _action = mutableStateOf<Pomodoro?>(null)
-    val action: State<Pomodoro?> = _action
+    var pomodoroState by mutableStateOf(PomodoroState())
+
     init {
         savedStateHandle.get<Long>("actionId").let {actionId ->
             if (actionId?.toInt() == -1) return@let
@@ -32,7 +38,7 @@ class PomodoroViewModel @Inject constructor(
     private suspend fun getPomodoroById(actionId: Long) {
         pomodoroUseCase.getPomodoroById(actionId).collect { pomodoro ->
             Log.e("PomodoroFlow", "$pomodoro")
-            _action.value = pomodoro
+            pomodoroState = pomodoroState.copy(pomodoro = pomodoro)
         }
     }
 }

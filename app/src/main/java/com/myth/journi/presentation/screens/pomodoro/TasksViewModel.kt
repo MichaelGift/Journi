@@ -2,7 +2,9 @@ package com.myth.journi.presentation.screens.pomodoro
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,12 +17,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+data class TaskState(
+    val taskList: List<Task> = emptyList()
+)
+
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val tasksUseCase: TasksUseCase,
     private val actionsUseCase: ActionsUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    var taskState by mutableStateOf(TaskState())
+
     private val _taskList = mutableStateOf(listOf<Task>())
     val taskList: State<List<Task>> = _taskList
     private val _action = mutableStateOf<Action?>(null)
@@ -34,6 +42,14 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    fun onEvent(event: TaskEvent){
+        viewModelScope.launch {
+            when (event) {
+                is TaskEvent.SaveCompletedTasks -> saveCompletedTasks()
+                is TaskEvent.UpdateTaskList -> updateTaskList(event.index, event.isChecked)
+            }
+        }
+    }
     private suspend fun getActionById(actionId: Long) {
         actionsUseCase.getActionById(actionId).collect { action ->
             Log.d("TaskList", "Action is of type $action")
@@ -44,7 +60,7 @@ class TasksViewModel @Inject constructor(
     private suspend fun getTasksByActionId(actionId: Long) {
         tasksUseCase.getTasksById(actionId).collect { tasks ->
             Log.d("TaskList", "$tasks")
-            _taskList.value = tasks
+            taskState = taskState.copy(taskList = tasks)
         }
     }
 
@@ -61,4 +77,8 @@ class TasksViewModel @Inject constructor(
         _action.value.let { it?.completed = completedTasks.size }
         actionsUseCase.updateTaskCompletion(_action.value!!)
     }
+}
+sealed class TaskEvent{
+    data object SaveCompletedTasks: TaskEvent()
+    data class UpdateTaskList(val index: Int, val isChecked: Boolean): TaskEvent()
 }

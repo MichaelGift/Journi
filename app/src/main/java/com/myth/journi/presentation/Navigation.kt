@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.myth.journi.common.utils.Screen
 import com.myth.journi.presentation.screens.pomodoro.PomodoroScreen
+import com.myth.journi.presentation.screens.pomodoro.PomodoroViewModel
+import com.myth.journi.presentation.screens.pomodoro.TasksViewModel
 import com.myth.journi.presentation.screens.task.ActionsListScreen
 import com.myth.journi.presentation.screens.task.ActionsViewModel
 import com.myth.journi.presentation.screens.task.CreateGoalScreen
@@ -19,6 +21,8 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val actionsViewModel: ActionsViewModel = hiltViewModel()
     val goalsViewModel: GoalsViewModel = hiltViewModel()
+    val taskViewModel: TasksViewModel = hiltViewModel()
+    val pomodoroViewModel: PomodoroViewModel = hiltViewModel()
 
 
     NavHost(
@@ -47,7 +51,11 @@ fun AppNavigation() {
                 },
             )
         ) {
-            PomodoroScreen(navController = navController)
+            PomodoroScreen(
+                pomodoroState = pomodoroViewModel.pomodoroState,
+                taskState = taskViewModel.taskState,
+                taskEvent = taskViewModel::onEvent,
+                onBack = { navController.navigateUp() })
         }
     }
 }

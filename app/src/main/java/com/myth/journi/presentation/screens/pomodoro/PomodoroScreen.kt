@@ -9,42 +9,79 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.myth.journi.presentation.screens.pomodoro.components.Pomodoro
+import com.myth.journi.presentation.screens.pomodoro.components.PomodoroCounter
 import com.myth.journi.presentation.screens.pomodoro.components.PomodoroTopBar
 import com.myth.journi.presentation.screens.pomodoro.components.TaskCard
+import com.myth.journi.ui.theme.JourniTheme
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.DurationUnit
 
 @Composable
 fun PomodoroScreen(
-    pomodoroViewModel: PomodoroViewModel = hiltViewModel(),
-    tasksViewModel: TasksViewModel = hiltViewModel(),
-    navController: NavController
+    pomodoroState: PomodoroState,
+    taskState: TaskState,
+    taskEvent: (TaskEvent) -> Unit,
+    onBack: () -> Unit
 ) {
-    val pomodoro = pomodoroViewModel.action.value
-    val taskList = tasksViewModel.taskList.value
-
     Scaffold(topBar = {
         PomodoroTopBar(title = " ", onNavigationClick = {
-            tasksViewModel.saveCompletedTasks()
-            navController.navigateUp()
+            taskEvent(TaskEvent.SaveCompletedTasks)
+            onBack()
         })
     }) { paddingValues ->
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-            if (pomodoro != null) Pomodoro(settings = pomodoro)
+            if (pomodoroState.pomodoro != null) PomodoroCounter(settings = pomodoroState.pomodoro)
             Spacer(modifier = Modifier.height(8.dp))
             LazyColumn {
-                itemsIndexed(items = taskList) { index, item ->
+                itemsIndexed(items = taskState.taskList) { index, item ->
                     if (!item.done) {
                         TaskCard(task = item) {
-                            tasksViewModel.updateTaskList(index, it)
+                            taskEvent(TaskEvent.UpdateTaskList(index, it))
                         }
                     }
                 }
             }
         }
+    }
+}
+
+val pomodoro = PomodoroState(
+    pomodoro = com.myth.journi.domain.model.Pomodoro(
+        id = 0,
+        actionId = 0,
+        runs = 2,
+        duration = 1.minutes.toLong(DurationUnit.MILLISECONDS),
+        shortRestDuration = 5.minutes.toLong(DurationUnit.MILLISECONDS),
+        longRestDuration = 15.minutes.toLong(DurationUnit.MILLISECONDS),
+        setsBeforeLongRest = 4
+    )
+)
+@Preview
+@Composable
+fun PomodoroScreenPreview() {
+    JourniTheme(darkTheme = false) {
+        PomodoroScreen(
+            pomodoroState = pomodoro,
+            taskState = TaskState(),
+            taskEvent = {},
+            onBack = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PomodoroScreenPreviewDark() {
+    JourniTheme(darkTheme = true) {
+        PomodoroScreen(
+            pomodoroState = pomodoro,
+            taskState = TaskState(),
+            taskEvent = {},
+            onBack = {}
+        )
     }
 }
