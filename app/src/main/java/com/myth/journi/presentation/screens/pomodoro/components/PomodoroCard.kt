@@ -3,15 +3,21 @@ package com.myth.journi.presentation.screens.pomodoro.components
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -21,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,7 +79,9 @@ fun PomodoroCounter(settings: Pomodoro) {
     }
 
     Box(
-        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(horizontal = 64.dp)
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -84,11 +91,28 @@ fun PomodoroCounter(settings: Pomodoro) {
             progress = animatedProgress,
             color = MaterialTheme.colorScheme.primary,
         )
-        Text(
-            text = formatMillis(timeLeft),
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Column(
+            modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,){
+            Text(
+                text = formatMillis(timeLeft),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(imageVector = Icons.Filled.RestartAlt, contentDescription = "Restart")
+                }
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(imageVector = Icons.Filled.Pause, contentDescription = "Pau")
+                }
+            }
+        }
     }
 }
 
@@ -105,7 +129,7 @@ fun PreviewPomodoro() {
         id = 0,
         actionId = 0,
         runs = 2,
-        duration = 50.seconds.toLong(DurationUnit.MILLISECONDS),
+        duration = 59.seconds.toLong(DurationUnit.MILLISECONDS),
         shortRestDuration = 5.minutes.toLong(DurationUnit.MILLISECONDS),
         longRestDuration = 15.minutes.toLong(DurationUnit.MILLISECONDS),
         setsBeforeLongRest = 4

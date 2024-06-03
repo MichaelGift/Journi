@@ -2,6 +2,7 @@ package com.myth.journi.presentation.screens.pomodoro
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,14 +26,14 @@ fun PomodoroScreen(
     taskEvent: (TaskEvent) -> Unit,
     onBack: () -> Unit
 ) {
-    Scaffold(topBar = {
-        PomodoroTopBar(title = " ", onNavigationClick = {
+    Scaffold(
+        topBar = { PomodoroTopBar(title = " ", onNavigationClick = {
             taskEvent(TaskEvent.SaveCompletedTasks)
             onBack()
         })
     }) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues).fillMaxSize()
         ) {
             if (pomodoroState.pomodoro != null) PomodoroCounter(settings = pomodoroState.pomodoro)
             Spacer(modifier = Modifier.height(8.dp))
@@ -60,13 +61,35 @@ val pomodoro = PomodoroState(
         setsBeforeLongRest = 4
     )
 )
+val tasks =  TaskState(
+    taskList = listOf(
+        com.myth.journi.domain.model.Task(
+            id = 0,
+            actionId = 0,
+            done = false,
+            description = "Task 1"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 1,
+            actionId = 0,
+            done = false,
+            description = "Task 2"
+        ),
+        com.myth.journi.domain.model.Task(
+            id = 2,
+            actionId = 0,
+            done = false,
+            description = "Task 3"
+        ),
+    )
+)
 @Preview
 @Composable
 fun PomodoroScreenPreview() {
     JourniTheme(darkTheme = false) {
         PomodoroScreen(
             pomodoroState = pomodoro,
-            taskState = TaskState(),
+            taskState = tasks,
             taskEvent = {},
             onBack = {}
         )
@@ -79,7 +102,7 @@ fun PomodoroScreenPreviewDark() {
     JourniTheme(darkTheme = true) {
         PomodoroScreen(
             pomodoroState = pomodoro,
-            taskState = TaskState(),
+            taskState = tasks,
             taskEvent = {},
             onBack = {}
         )
