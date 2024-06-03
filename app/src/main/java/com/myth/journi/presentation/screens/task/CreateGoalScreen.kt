@@ -31,15 +31,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.myth.journi.domain.model.Goal
+import com.myth.journi.presentation.events.GoalEvent
 import com.myth.journi.presentation.screens.task.components.Chip
 import com.myth.journi.presentation.screens.task.components.DatePickerDialog
 import com.myth.journi.presentation.screens.task.components.GoalTopAppBar
 import com.myth.journi.presentation.screens.task.components.TaskEntry
 import com.myth.journi.presentation.screens.task.components.TimePickerDialog
+import com.myth.journi.ui.theme.JourniTheme
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
@@ -48,12 +49,12 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGoalScreen(
-    navController: NavController,
-    goalsViewModel: GoalsViewModel = hiltViewModel()
+    navigateBack: () -> Unit, goalEvent: (GoalEvent) -> Unit
 ) {
 
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+
     var showStartTimePicker by remember { mutableStateOf(false) }
     val startTimePickerState = rememberTimePickerState(
         initialHour = LocalTime.now().hour, initialMinute = LocalTime.now().minute
@@ -88,33 +89,28 @@ fun CreateGoalScreen(
 
     Scaffold(
         topBar = {
-            GoalTopAppBar(
-                title = "Create Goal",
-                onNavigationClick = {
-                    navController.navigateUp()
-                },
+            GoalTopAppBar(title = "Create Goal",
+                onNavigationClick = { navigateBack() },
                 onSaveIconClick = {
-                    goalsViewModel.saveGoal(
-                        goal = Goal(
-                            id = 0,
-                            title = title,
-                            description = description,
-                        ),
-                        startDate = startDatePickerState.selectedDateMillis!!,
-                        endDate = endDatePickerState.selectedDateMillis!!,
-                        startTimeHour = startTimePickerState.hour,
-                        startTimeMinute = startTimePickerState.minute,
-                        endTimeHour = endTimePickerState.hour,
-                        endTimeMinute = endTimePickerState.minute,
-                        tasks = tasks
-                    ) { isSuccessful, message ->
-                        if (isSuccessful)
-                            Log.d("CreateTask", "Success")
-                        else {
-                            Log.e("CreateTask", message.toString())
-                        }
-                    }
-                })
+                    goalEvent(
+                        GoalEvent.SaveGoal(
+                            goal = Goal(
+                                id = 0,
+                                title = title,
+                                description = description,
+                            ),
+                            category = "Personal",
+                            startDate = startDatePickerState.selectedDateMillis!!,
+                            endDate = endDatePickerState.selectedDateMillis!!,
+                            startTimeHour = startTimePickerState.hour,
+                            startTimeMinute = startTimePickerState.minute,
+                            endTimeHour = endTimePickerState.hour,
+                            endTimeMinute = endTimePickerState.minute,
+                            tasks = tasks
+                        )
+                    )
+                }
+            )
         },
     ) { padding ->
         Column(
@@ -132,6 +128,7 @@ fun CreateGoalScreen(
                         )
                     })
             }
+
             if (showEndTimePicker) {
                 TimePickerDialog(onCancel = { showEndTimePicker = false },
                     onConfirm = { showEndTimePicker = false },
@@ -141,6 +138,7 @@ fun CreateGoalScreen(
                         )
                     })
             }
+
             if (showStartDatePicker) {
                 DatePickerDialog(onCancel = { showStartDatePicker = false },
                     onConfirm = { showStartDatePicker = false },
@@ -149,9 +147,9 @@ fun CreateGoalScreen(
                             state = startDatePickerState,
                             modifier = Modifier.fillMaxWidth(),
                         )
-                    }
-                )
+                    })
             }
+
             if (showEndDatePicker) {
                 DatePickerDialog(onCancel = { showEndDatePicker = false },
                     onConfirm = { showEndDatePicker = false },
@@ -163,6 +161,7 @@ fun CreateGoalScreen(
                     }
                 )
             }
+
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -223,13 +222,9 @@ fun CreateGoalScreen(
             ) {
                 Text(text = "Start time")
                 Chip(
-                    clickEvent = { showStartTimePicker = true },
-                    label = String.format(
-                        "%02d:%02d",
-                        startTimePickerState.hour,
-                        startTimePickerState.minute
-                    ),
-                    icon = Icons.Filled.Timelapse
+                    clickEvent = { showStartTimePicker = true }, label = String.format(
+                        "%02d:%02d", startTimePickerState.hour, startTimePickerState.minute
+                    ), icon = Icons.Filled.Timelapse
                 )
             }
             Row(
@@ -241,19 +236,14 @@ fun CreateGoalScreen(
             ) {
                 Text(text = "End time")
                 Chip(
-                    clickEvent = { showEndTimePicker = true },
-                    label = String.format(
-                        "%02d:%02d",
-                        endTimePickerState.hour,
-                        endTimePickerState.minute
-                    ),
-                    icon = Icons.Filled.Timelapse
+                    clickEvent = { showEndTimePicker = true }, label = String.format(
+                        "%02d:%02d", endTimePickerState.hour, endTimePickerState.minute
+                    ), icon = Icons.Filled.Timelapse
                 )
             }
 
             tasks.forEachIndexed { index, task ->
-                TaskEntry(
-                    task = task,
+                TaskEntry(task = task,
                     onValueChange = { updatedValue ->
                         tasks = tasks.toMutableList().also { it[index] = updatedValue }
                     },
@@ -263,13 +253,20 @@ fun CreateGoalScreen(
                     onLeadingIconClick = {
                         tasks = if (index == tasks.size - 1) {
                             tasks.toMutableList().also { it.add("") }
-                        } else
-                            tasks.toMutableList().also { it.removeAt(index) }
+                        } else tasks.toMutableList().also { it.removeAt(index) }
                         Log.d("CreateTask", tasks.toString())
                     },
                     leadingIcon = if (index == tasks.size - 1) Icons.Filled.Add else Icons.Filled.Close
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewCreateGoalScreen() {
+    JourniTheme {
+        CreateGoalScreen(navigateBack = {}, goalEvent = {})
     }
 }
