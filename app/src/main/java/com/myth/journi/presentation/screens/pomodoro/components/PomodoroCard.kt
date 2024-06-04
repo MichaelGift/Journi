@@ -91,6 +91,7 @@ fun PomodoroCounter(settings: Pomodoro) {
             strokeCap = StrokeCap.Round,
             progress = animatedProgress,
             color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
         )
         Column(
             modifier = Modifier

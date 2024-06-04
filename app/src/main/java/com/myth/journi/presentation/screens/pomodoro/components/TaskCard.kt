@@ -24,15 +24,13 @@ fun TaskCard(
     onItemCheckedChange: (Boolean) -> Unit
 ) {
     ElevatedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        onClick = { onItemCheckedChange(!task.done) }) {
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        onClick = { onItemCheckedChange(!task.done) }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onItemCheckedChange(!task.done) }
-                .padding(4.dp),
+                .clickable { onItemCheckedChange(!task.done) },
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
