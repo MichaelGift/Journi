@@ -91,6 +91,8 @@ dependencies {
 
     // Gson converter
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation(kotlin("reflect"))
 }
 
 // Allow references to generated code
