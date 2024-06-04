@@ -29,7 +29,7 @@ fun AppNavigation() {
         composable(Screen.ActionsListScreen.route) {
             ActionsListScreen(
                 navigate = { navController.navigate(it) },
-                actions = actionsVM.actions.value,
+                actionsState = actionsVM.actionState,
                 pomodoroEvent = pomodoroVM::onEvent,
                 taskEvent = tasksVM::onEvent
             )

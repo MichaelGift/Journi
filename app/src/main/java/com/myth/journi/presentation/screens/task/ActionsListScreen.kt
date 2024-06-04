@@ -24,10 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.myth.journi.common.utils.Screen
-import com.myth.journi.domain.model.Action
 import com.myth.journi.presentation.screens.pomodoro.PomodoroEvent
 import com.myth.journi.presentation.screens.pomodoro.TaskEvent
-import com.myth.journi.presentation.screens.pomodoro.pomodoro
 import com.myth.journi.presentation.screens.task.components.ActionStats
 import com.myth.journi.presentation.screens.task.components.MonthTopAppBar
 import com.myth.journi.ui.theme.JourniTheme
@@ -37,9 +35,9 @@ import java.time.LocalDate
 @Composable
 fun ActionsListScreen(
     navigate: (String) -> Unit,
-    pomodoroEvent:(PomodoroEvent) -> Unit,
+    pomodoroEvent: (PomodoroEvent) -> Unit,
     taskEvent: (TaskEvent) -> Unit,
-    actions: List<Action>
+    actionsState: ActionState
 ) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
@@ -84,10 +82,9 @@ fun ActionsListScreen(
             )
             LazyColumn(
                 state = rememberLazyListState(),
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
-                items(items = actions) { actionItem ->
+                items(items = actionsState.actionList) { actionItem ->
                     ActionStats(
                         item = actionItem,
                         modifier = Modifier
@@ -108,12 +105,26 @@ fun ActionsListScreen(
 
 @Preview
 @Composable
-fun PreviewActionsListScreen(){
+fun PreviewActionsListScreen() {
     JourniTheme {
         ActionsListScreen(
             navigate = {},
             pomodoroEvent = {},
             taskEvent = {},
-            actions = emptyList())
+            actionsState = ActionState()
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewActionsListScreenDark() {
+    JourniTheme(darkTheme = true) {
+        ActionsListScreen(
+            navigate = {},
+            pomodoroEvent = {},
+            taskEvent = {},
+            actionsState = ActionState()
+        )
     }
 }
