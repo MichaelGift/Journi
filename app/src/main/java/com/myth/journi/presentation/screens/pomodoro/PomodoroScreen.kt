@@ -1,5 +1,6 @@
 package com.myth.journi.presentation.screens.pomodoro
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +30,7 @@ fun PomodoroScreen(
 ) {
     Scaffold(
         topBar = {
-            PomodoroTopBar(title = " ", onNavigationClick = {
+            PomodoroTopBar(title = "${taskState.currentAction?.title} ", onNavigationClick = {
                 taskEvent(TaskEvent.SaveCompletedTasks)
                 onBack()
             })
@@ -47,10 +48,8 @@ fun PomodoroScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 itemsIndexed(items = taskState.taskList) { index, item ->
-                    if (!item.done) {
-                        TaskCard(task = item) {
-                            taskEvent(TaskEvent.UpdateTaskList(index, it))
-                        }
+                    AnimatedVisibility(!item.done) {
+                        TaskCard(task = item) { taskEvent(TaskEvent.UpdateTaskList(index, it)) }
                     }
                 }
             }
